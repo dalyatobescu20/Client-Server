@@ -1,0 +1,88 @@
+//TOBESCU DALYA-ALEXANDRA//
+//GRUPA 321 CB//
+//TEMA 2 - PCOM//
+
+
+In primul rand, in utils.h se gasesc structurile pe care le-am 
+folosit pentru a retine informatiile despre clienti, topicuri si mesaje.
+
+Pentru partea de client tcp sunt 2 cazuri:
+
+1. Primeste semnal de la stdin
+    Atunci inseamna ca poate sa primeasca comanda de exit, subscribe si
+    unsubscribe.
+    A. EXIT:
+        --> trimite mesajul la server si iese din while(se inchide socketul
+        de asemenea);
+    B. SUBSCRIBE:
+        -->am creat o functie care imi ia argumentele si le trimite la server
+        practic am luat topicul si fd-ul si apoi l-am trimis si am afisat
+        "Subscribed to topic"
+    C. UNSUBSCRIBE:
+        -->la fel ca la subscribe, am creat o functie care imi ia argumentele,
+        dar de data asta ne trebuie doar topicul, dupa ce l-am extras l-am 
+        trimis la server si am afisat "Unsubscribed from topic"
+
+2. Primeste semnal de la server:
+    Acest lucru se intampla cand s-au primit mesaje de la udp si subscriber-ul
+    trebuie sa le afiseze sau atunci cand se inchide serverul si trebuie inchis
+    si subscriber-ul.
+    Folosesc functia de recv_message pentru a lua mesajul si apoi il afisez.
+    Daca comanda este "exit", inchid socketul si ies din while.
+
+
+Pentru parte de server sunt 4 cazuri:
+
+1.Primeste semnal de la udp 
+    Atunci inseamna ca trebuie sa luam mesajele si sa le parsam in functie de 
+    tipul de data specificat.
+    Pentru parsare am folosit functia get_type_format, care returneaza mesajul
+    primit parsat.
+    Apoi trebuie trimis mesajul la client. Daca clientul este online si gasim 
+    topicul in vectorul lui de topicuri trimitem mesajul, daca acesta este 
+    offline si sf-ul topicului respectiv este 1, adaugam mesajele intr-un 
+    vector pentru a putea sa le regasim  daca clientul se reconecteaza.
+    Am folosit functiile send_udp_message_to_tcp pentru a trimite mesajele
+    catre clienti si add_to_offline_messages pentru a stoca mesajele offline.
+
+
+2.Primeste semnal de la tcp
+    Aici ne ocupam de clienti si tinem cont cine s-a conectat si cine s-a 
+    deconectat.Am folosit 2 vectori, unul pentru clientii online si unul 
+    pentru clientii offline. Cautam clientii dupa id si sunt 3 cazuri:
+
+    A. Clientul este conectat deja
+        -->inseamna ca am gasit id-ul in vectorul de clienti conectati,
+        astfel afisam,"Client x already connected".
+
+    B. Clientul este deconectat si doreste sa se conecteze iar
+        -->inseamna ca trebuie sa trimitem mesajele clientului care a fost
+        deconectat si sa-l adaugam in vectorul de conectati si sa-l eliminam
+        din cel ce deconectati.
+
+    C. Clientul nu exista
+        -->inseamna ca trebuie sa-l adaugam si am folosit functia add_client.
+
+3.Primeste semnal stdin
+    Acest semnal poate sa fie doar de exit, atunci inchidem toti socketii
+    si eliberam memoria.
+
+4.Primeste semnal de la client
+    Sunt 3 cazuri:
+    A.Clientul a dat exit
+        -->Afisam ca clientul s-a deconectat si il eliminam din clienti 
+        conectati si il adaugam in vectorul de clienti deconectati
+
+    B.Clientul a dat subscribe
+        Daca topicul nu exista, il adaugam in vectorul de topicuri ale 
+        clientului. Daca exista, ii schimbam doar sf-ul.
+
+    C.Clientul a dat unsubscribe
+        Daca topicul exista, il stergem din vector.
+        Daca nu exista printam ca nu s-a putut gasi.
+    
+PS: Daca observati ca in fisierul de subscriber am folosit poll si in server
+am folosit select, este pentru ca daca puneam select aveam eroarea broken pipe
+si nu am stiut cum sa rezolv si pe net scria ca depinde de cazuri uneori e mai 
+rapid poll ul, alteori nu si am zis sa folosesc select, asa le-am testat pe
+amandoua. <3
