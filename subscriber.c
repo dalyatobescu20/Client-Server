@@ -11,7 +11,7 @@
 #include <netdb.h>
 #include <math.h>
 #include "utils.h"
-#define MAX_CLIENTS 10 // numarul maxim de clienti in asteptare
+#define MAX_CLIENTS 10 // number of clients in waiting
 
 void send_message(int socket, char * buffer){
     int ret;
@@ -156,8 +156,6 @@ int main(int argc, char *argv[]) {
             exit(1);
         }
 
-
-        // se adauga socketul pe care se asculta conexiuni in multimea pfds
         struct pollfd pfds[32];
         int nfds = 0;
 
@@ -174,7 +172,6 @@ int main(int argc, char *argv[]) {
         while(1) {
 
             poll(pfds, nfds, -1);
-            // daca s-a primit ceva de la stdin
             if(pfds[0].revents & POLLIN) {
                 memset(buffer, 0, BUFLEN);
                 fgets(buffer, BUFLEN, stdin);
@@ -212,15 +209,12 @@ int main(int argc, char *argv[]) {
                 }
                 
             } else if(pfds[1].revents & POLLIN) {
-                //daca s-a primit ceva de la server
                 memset(buffer, 0, BUFLEN);
-                //primim mesajul
                 int ret = recv_message(sockfd, buffer);
                 
                 if(strcmp(buffer, "exit") == 0 || ret == 0) {
                     return 0;
                 } else {
-                    //afisam mesajul
                     printf("%s\n", buffer);
                 }
             }
