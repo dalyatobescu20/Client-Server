@@ -31,7 +31,7 @@ Start the server using the following command:
 ./server <PORT>
 ```
 
-## Displayed Messages
+## Displayed Messages for Server
 
 To monitor server activity, events such as client connections and disconnections are displayed as follows:
 
@@ -49,6 +49,15 @@ To start a TCP client, use the following command:
 ```bash
 ./subscriber <ID_CLIENT> <IP_SERVER> <PORT_SERVER>
 ```
+
+## Displayed Messages for TCP clients
+
+For each command received from the keyboard, the client displays a feedback line as follows:
+
+- **Subscribed to topic.**
+- **Unsubscribed from topic.**
+These messages are displayed only after the commands have been sent to the server.
+
 
 
 
