@@ -19,7 +19,7 @@ To achieve the objectives, we'll implement a platform consisting of three compon
 
 The desired functionality is for each TCP client to receive messages from the server that are published by UDP clients and refer to the topics they are subscribed to.
 
-## Server
+## SERVER
 
 The server acts as a broker, facilitating message management within the platform. It opens two sockets (one TCP and one UDP) on a specified port and awaits connections/datagrams on all available local IP addresses.
 
@@ -28,13 +28,29 @@ The server acts as a broker, facilitating message management within the platform
 Start the server using the following command:
 
 ```bash
-./server <PORT> 
+./server <PORT>
+```
 
-# Displayed Messages
+## Displayed Messages
 
 To monitor server activity, events such as client connections and disconnections are displayed as follows:
 
 - **New client <ID_CLIENT> connected from IP:PORT.**
 - **Client <ID_CLIENT> disconnected.**
 
-The server will not display any other messages apart from those specified. Further details regarding this aspect are explained in more detail in section 6.
+# TCP Clients
+
+TCP clients can subscribe and unsubscribe to topics by sending messages to the server.
+
+## Startup
+
+To start a TCP client, use the following command:
+
+```bash
+./subscriber <ID_CLIENT> <IP_SERVER> <PORT_SERVER>
+```
+
+
+
+
+
