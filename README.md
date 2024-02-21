@@ -56,9 +56,16 @@ For each command received from the keyboard, the client displays a feedback line
 
 - **Subscribed to topic.**
 - **Unsubscribed from topic.**
+  
 These messages are displayed only after the commands have been sent to the server.
 
+# Displaying Received Messages
 
+For each message received from the server (i.e., data from a topic to which the client is subscribed), the client immediately displays a message in the following format:
+
+```bash
+IP_CLIENT_UDP>:<PORT_CLIENT_UDP> - <TOPIC> - <DATA_TYPE> - <MESSAGE_VALUE>
+```
 
 
 
