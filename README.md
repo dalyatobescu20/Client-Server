@@ -28,4 +28,13 @@ The server acts as a broker, facilitating message management within the platform
 Start the server using the following command:
 
 ```bash
-./server <PORT>
+./server <PORT> 
+
+# Displayed Messages
+
+To monitor server activity, events such as client connections and disconnections are displayed as follows:
+
+- **New client <ID_CLIENT> connected from IP:PORT.**
+- **Client <ID_CLIENT> disconnected.**
+
+The server will not display any other messages apart from those specified. Further details regarding this aspect are explained in more detail in section 6.
